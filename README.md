@@ -24,13 +24,13 @@ drift the constraint exists to prevent.
 There was also no single roadmap to host. Each plan already sits next to its own code, and
 `design/ROADMAP.md` is the index of where:
 
-| The plan | Where it lives |
-| --- | --- |
-| The language and compiler work queue | [`mzizi-dev/mzizi` → `MIGRATION.md` §4](https://github.com/mzizi-dev/mzizi/blob/main/MIGRATION.md) |
-| Language design — RFC-0001 to RFC-0004 | [`mzizi-dev/mzizi` → `design/`](https://github.com/mzizi-dev/mzizi/tree/main/design) |
-| Phase 0 benchmark | [`mzizi-dev/mzizi` → `benchmarks/`](https://github.com/mzizi-dev/mzizi/tree/main/benchmarks) and `CHARTER.md` §6 |
-| The Rust primitives that are the benchmark's ground truth | [`mzizi-dev/mzizi-registry#222`](https://github.com/mzizi-dev/mzizi-registry/issues/222) |
-| What a registry is for once the language ships (RFC-0005) | [`mzizi-dev/agent-tools#76`](https://github.com/mzizi-dev/agent-tools/issues/76) |
+| The plan                                                  | Where it lives                                                                                                   |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| The language and compiler work queue                      | [`mzizi-dev/mzizi` → `MIGRATION.md` §4](https://github.com/mzizi-dev/mzizi/blob/main/MIGRATION.md)               |
+| Language design — RFC-0001 to RFC-0004                    | [`mzizi-dev/mzizi` → `design/`](https://github.com/mzizi-dev/mzizi/tree/main/design)                             |
+| Phase 0 benchmark                                         | [`mzizi-dev/mzizi` → `benchmarks/`](https://github.com/mzizi-dev/mzizi/tree/main/benchmarks) and `CHARTER.md` §6 |
+| The Rust primitives that are the benchmark's ground truth | [`mzizi-dev/mzizi-registry#222`](https://github.com/mzizi-dev/mzizi-registry/issues/222)                         |
+| What a registry is for once the language ships (RFC-0005) | [`mzizi-dev/agent-tools#76`](https://github.com/mzizi-dev/agent-tools/issues/76)                                 |
 
 ## One thing worth knowing before you read any of it
 
