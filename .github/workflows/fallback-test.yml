@@ -1,0 +1,9 @@
+# Throwaway: proves nyuchi/.github#69's config fallback. Do not merge.
+name: Fallback test
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  fallback:
+    uses: nyuchi/.github/.github/workflows/reusable-lint.yml@ci/lint-config-fallback
