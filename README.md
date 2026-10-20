@@ -65,6 +65,88 @@ says so at the top, with the evidence, and this README repeats it because an arc
 repository named "roadmap" is exactly the sort of thing that gets read as a claim of
 progress.
 
+## Decided direction and open tracking, as of 2026-10-20
+
+This section points at decisions and open work. Each item says what is built today and
+what is decided but not built. Nothing here is a claim that a decision has shipped.
+
+**Release plan.** The staging-to-`main` release plan across the Mzizi repositories is
+[issue #17 in this repository](https://github.com/mzizi-dev/mzizi-roadmap/issues/17)
+(Waves 1 to 5). The language was released to `main` on 2026-10-20
+([`mzizi-dev/mzizi#120`](https://github.com/mzizi-dev/mzizi/pull/120)).
+
+**The four API gateways.** Each has its own repository and host. Live hostnames do not change.
+
+| Gateway                               | Repository                                                                                               | Host                                   | Today                      | Decided, not built                                                                                                                                           |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Mzizi API (public registry API, free) | [`mzizi-dev/mzizi-api`](https://github.com/mzizi-dev/mzizi-api) (formerly `mzizi-dev/mzizi-api-gateway`) | `api.mzizi.dev`                        | A Hono (TypeScript) Worker | Nothing decided for a rebuild                                                                                                                                |
+| Nyuchi API (B2B, scoped `nyk_` keys)  | `nyuchi/nyuchi-api` (formerly `nyuchi/api-gateway`, private)                                             | `api.nyuchi.com`                       | FastAPI on Fly             | Rebuild in Rust, with the async-writes data gateway                                                                                                          |
+| Mukoko API (consumer app surfaces)    | `mukoko-dev/mukoko-api` (private, unchanged)                                                             | `api.mukoko.com` (no DNS yet)          | Being built on Workers     | Switch to a Rust build                                                                                                                                       |
+| Nyuchi Servers API (internal only)    | `nyuchi/nyuchi-servers-api` (formerly `nyuchi/data-gateway`, private)                                    | `api.nyuchiservers.com` (no public IP) | Not built                  | Internal-only Fly origin behind a private tunnel; admin, pay, pipeline, api-keys, agents, entitlements, licences, organization, workspaces and `/internal/*` |
+
+Tracking for the Nyuchi API rebuild is `nyuchi/nyuchi-api#353` (a private repository, so it
+is named here and not linked).
+
+**Fly regions (decided, not built).** Fly apps are not Johannesburg-only. Stateless apps (the
+gateways' Rust origins, the Nyuchi Servers API and the data-gateway origin) are decided to run
+in three regions: `jnb` (Johannesburg), Europe (`cdg` Paris recommended, `mad` Madrid second)
+and `sin` (Singapore). The intended coverage is a routing rationale: `jnb` for Southern and East
+Africa, `cdg` for North and West Africa and Europe, and `sin` for Asia-Pacific. Many subsea
+cables to North and West Africa land in Marseille and backhaul to Paris. Stateful data services
+in data-infra (Cassandra, the Postgres ledger, Redpanda, CouchDB, Doris) stay primary in `jnb`
+until a replication design exists. No latency figures are claimed for any region.
+
+**Three build targets.** Decided: Mzizi builds for Cloudflare Workers (wasm32), for containers
+(any OCI host, such as Fly machines) and for bare metal (a native Linux binary). Every backend
+sits behind a trait with an adapter per side, so Cloudflare-hosted stores and Fly-hosted
+stores are reachable from either. Built today: every Rust crate builds and tests natively,
+and `mz build` emits a native axum service and a native program. There is no container image
+and no Workers target yet. The data crate and the MongoDB crate have only a Workers socket
+transport; a native transport is planned.
+
+**Components.** Decided: Mzizi components are Rust, built in-house, not borrowed from another
+framework. Mzizi Roots render with Mzizi's own `render(props) -> String`
+([`mzizi-dev/mzizi-registry#506`](https://github.com/mzizi-dev/mzizi-registry/pull/506) and
+[`#510`](https://github.com/mzizi-dev/mzizi-registry/pull/510), merged: the skeleton and six
+static primitives). Dioxus is still a dependency of several crates until the migration in the
+registry's RFC-roots-renderer finishes. No Dioxus, Leptos or Yew in new work. Svelte is out
+everywhere. Astro renders HTML on the server, and static components ship no WASM.
+
+**The consoles.**
+
+- Mzizi console (`app.mzizi.dev`, [`mzizi-dev/mzizi-console`](https://github.com/mzizi-dev/mzizi-console))
+  is standalone. Its scope is the registry, components, tokens, architecture and developer
+  tooling. Decided ([`mzizi-console#34`](https://github.com/mzizi-dev/mzizi-console/issues/34)):
+  one Rust Worker serves Astro's output; sign-in moves to the server (WorkOS, session cookie);
+  the data store is Cloudflare D1, not Supabase; it depends on the published Roots crates.
+  Today it is Astro pages plus Dioxus islands. The RFC is open as
+  [`mzizi-console#35`](https://github.com/mzizi-dev/mzizi-console/pull/35).
+- Nyuchi Console (`platform.nyuchi.com`) holds the Astro console app and its Rust Worker
+  backend. Billing for services runs through the Nyuchi Console.
+
+**Data.** Decided: MongoDB stays. "Supabase" in the platform means the self-hosted Postgres
+ledger on Fly, not a hosted Supabase project. The platform's system of record is the Redpanda
+event log. The Mzizi console uses D1. The data crate (`mzizi-data`) is open in pull requests
+and not yet merged or wired into any production app.
+
+**Renames.** Repository names moved at the end of October 2026. Use the new names:
+
+- `mzizi-dev/mzizi-api-gateway` is `mzizi-dev/mzizi-api`.
+- `nyuchi/api-gateway` is `nyuchi/nyuchi-api`.
+- `nyuchi/data-gateway` is `nyuchi/nyuchi-servers-api`.
+- `mukoko-dev/mukoko-api` is unchanged.
+
+Until the owner completes the renames, links to the new names return 404.
+
+**Cross-repository tracking.**
+
+- [`mzizi-registry#503`](https://github.com/mzizi-dev/mzizi-registry/issues/503): the Astro
+  and Rust/WASM integration brief, the registry drift, the data crate and the decisions they
+  need.
+- [`mzizi-console#34`](https://github.com/mzizi-dev/mzizi-console/issues/34): the console
+  rebuild on Astro with a Rust backend and Mzizi Roots.
+- `nyuchi/nyuchi-api#353`: the Nyuchi API rebuild (private).
+
 ## Licence
 
 Licensed under the [Apache License 2.0](./LICENSE).
