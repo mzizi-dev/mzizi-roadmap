@@ -99,15 +99,19 @@ in data-infra (Cassandra, the Postgres ledger, Redpanda, CouchDB, Doris) stay pr
 until a replication design exists. No latency figures are claimed for any region.
 
 **Three build targets.** Decided: Mzizi builds for Cloudflare Workers (wasm32), for containers
-(any OCI host, such as Fly machines) and for bare metal (a native Linux binary). Every backend
+(a standard OCI image, built with Docker by default and run by any OCI runtime, such as on Fly
+machines) and for bare metal (a native Linux binary). The language's RFC-0016
+([`mzizi-dev/mzizi#123`](https://github.com/mzizi-dev/mzizi/pull/123)) designs them, and the owner
+approved it as design only on 2026-10-21: the charter amendment and every build wave wait for the
+Phase 0 gate, so no container or bare-metal build work has started. Every backend
 sits behind a trait with an adapter per side, so Cloudflare-hosted stores and Fly-hosted
 stores are reachable from either. Built today: every Rust crate builds and tests natively,
 and `mz build` emits a native axum service and a native program. There is no container image
 and no Workers target yet. The data crate and the MongoDB crate have only a Workers socket
-transport; a native transport is planned.
+transport; a native transport is designed and waits for the Phase 0 gate.
 
 **Components.** Decided: Mzizi components are Rust, built in-house, not borrowed from another
-framework. Mzizi Roots render with Mzizi's own `render(props) -> String`
+framework. Mzizi Roots are moving to Mzizi's own `render(props) -> String`
 ([`mzizi-dev/mzizi-registry#506`](https://github.com/mzizi-dev/mzizi-registry/pull/506) and
 [`#510`](https://github.com/mzizi-dev/mzizi-registry/pull/510), merged: the skeleton and six
 static primitives). Dioxus is still a dependency of several crates until the migration in the
@@ -131,14 +135,15 @@ ledger on Fly, not a hosted Supabase project. The platform's system of record is
 event log. The Mzizi console uses D1. The data crate (`mzizi-data`) is open in pull requests
 and not yet merged or wired into any production app.
 
-**Renames.** Repository names moved at the end of October 2026. Use the new names:
+**Renames.** The owner renamed these repositories (decided 2026-10-20, live on 2026-10-21). Use the
+new names:
 
 - `mzizi-dev/mzizi-api-gateway` is `mzizi-dev/mzizi-api`.
 - `nyuchi/api-gateway` is `nyuchi/nyuchi-api`.
 - `nyuchi/data-gateway` is `nyuchi/nyuchi-servers-api`.
 - `mukoko-dev/mukoko-api` is unchanged.
 
-Until the owner completes the renames, links to the new names return 404.
+GitHub redirects the old names.
 
 **Cross-repository tracking.**
 
