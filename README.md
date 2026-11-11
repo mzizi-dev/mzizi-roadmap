@@ -110,13 +110,16 @@ and `mz build` emits a native axum service and a native program. There is no con
 and no Workers target yet. The data crate and the MongoDB crate have only a Workers socket
 transport; a native transport is designed and waits for the Phase 0 gate.
 
-**Components.** Decided: Mzizi components are Rust, built in-house, not borrowed from another
-framework. Mzizi Roots are moving to Mzizi's own `render(props) -> String`
+**Components.** Decided (owner, 2026-11-04, [`mzizi-registry#635`](https://github.com/mzizi-dev/mzizi-registry/issues/635)):
+Dioxus is out of the stack. Mzizi components and primitives are Mzizi first, TypeScript second,
+and native (Swift, Kotlin) where those exist. Mzizi Roots keep moving to Mzizi's own
+`render(props) -> String`
 ([`mzizi-dev/mzizi-registry#506`](https://github.com/mzizi-dev/mzizi-registry/pull/506) and
 [`#510`](https://github.com/mzizi-dev/mzizi-registry/pull/510), merged: the skeleton and six
-static primitives). Dioxus is still a dependency of several crates until the migration in the
-registry's RFC-roots-renderer finishes. No Dioxus, Leptos or Yew in new work. Svelte is out
-everywhere. Astro renders HTML on the server, and static components ship no WASM.
+static primitives). The removal of Dioxus from the crates that still depend on it is in progress
+in the registry. Open for the owner: what, if anything, replaces Dioxus as the Rust-side rendering
+target. No Leptos or Yew in new work. Svelte is out everywhere. Astro renders HTML on the server,
+and static components ship no WASM.
 
 **The consoles.**
 
@@ -125,7 +128,7 @@ everywhere. Astro renders HTML on the server, and static components ship no WASM
   tooling. Decided ([`mzizi-console#34`](https://github.com/mzizi-dev/mzizi-console/issues/34)):
   one Rust Worker serves Astro's output; sign-in moves to the server (WorkOS, session cookie);
   the data store is Cloudflare D1, not Supabase; it depends on the published Roots crates.
-  Today it is Astro pages plus Dioxus islands. The RFC is open as
+  Today it is Astro pages; Dioxus islands are being removed (owner decision, 2026-11-04). The RFC is open as
   [`mzizi-console#35`](https://github.com/mzizi-dev/mzizi-console/pull/35).
 - Nyuchi Console (`platform.nyuchi.com`) holds the Astro console app and its Rust Worker
   backend. Billing for services runs through the Nyuchi Console.
