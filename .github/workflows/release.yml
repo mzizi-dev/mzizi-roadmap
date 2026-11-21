@@ -1,0 +1,26 @@
+# Every green merge to `main` is a release: feat is a minor, everything else a
+# patch (from the merged PR's title); a breaking change is refused, a major is
+# made by hand (Run workflow, bump: major). Tag-only; the shared workflow is
+# nyuchi/.github's reusable-trunk-release.yml.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Override the bump: patch, minor or major. Empty decides from the PR title."
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    uses: nyuchi/.github/.github/workflows/reusable-trunk-release.yml@3375c2a85019eab828b89446984e8517e69e0475 # main, 2026-11-21
+    with:
+      bump: ${{ inputs.bump || '' }}
